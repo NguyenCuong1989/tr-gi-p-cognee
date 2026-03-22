@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: tr-gi-p-cognee-api
+    runtime: python
+    plan: free
+    rootDir: components/cognee
+    buildCommand: pip install .
+    startCommand: python -m uvicorn cognee.api.client:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: ENV
+        value: prod
+      - key: UI_APP_URL
+        value: https://tr-gi-p-cognee-web.onrender.com
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://tr-gi-p-cognee-web.onrender.com
+      - key: ACCEPT_LOCAL_FILE_PATH
+        value: "false"
+      - key: ALLOW_HTTP_REQUESTS
+        value: "false"
+      - key: REQUIRE_AUTHENTICATION
+        value: "false"
+      - key: ENABLE_BACKEND_ACCESS_CONTROL
+        value: "false"
+
+  - type: web
+    name: tr-gi-p-cognee-web
+    runtime: node
+    plan: free
+    rootDir: components/cognee/cognee-frontend
+    buildCommand: npm ci && npm rebuild lightningcss && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NEXT_PUBLIC_BACKEND_API_URL
+        value: https://tr-gi-p-cognee-api.onrender.com
