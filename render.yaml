@@ -10,6 +10,8 @@ services:
     envVars:
       - key: ENV
         value: prod
+      - key: PYTHON_VERSION
+        value: 3.13.5
       - key: UI_APP_URL
         value: https://tr-gi-p-cognee-web.onrender.com
       - key: CORS_ALLOWED_ORIGINS
