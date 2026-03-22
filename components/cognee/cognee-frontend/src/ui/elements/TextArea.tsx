@@ -5,8 +5,8 @@ import { InputHTMLAttributes, useCallback, useEffect, useLayoutEffect, useRef } 
 
 interface TextAreaProps extends Omit<InputHTMLAttributes<HTMLTextAreaElement>, "onChange"> {
   isAutoExpanding?: boolean; // Set to true to enable auto-expanding text area behavior. Default is false.
-  value: string;
-  onChange: (value: string) => void;
+  value?: string;
+  onChange?: (value: string) => void;
 }
 
 export default function TextArea({
@@ -77,14 +77,15 @@ export default function TextArea({
   useEffect(() => {
     const fakeTextAreaElement = fakeTextAreaRef.current;
     const textAreaText = fakeTextAreaElement?.innerText;
+    const currentValue = value ?? "";
 
-    if (fakeTextAreaElement && (value === "" || value === "\n")) {
+    if (fakeTextAreaElement && (currentValue === "" || currentValue === "\n")) {
       fakeTextAreaElement.innerText = placeholder;
       return;
     }
 
-    if (fakeTextAreaElement && textAreaText !== value) {
-      fakeTextAreaElement.innerText = value;
+    if (fakeTextAreaElement && textAreaText !== currentValue) {
+      fakeTextAreaElement.innerText = currentValue;
     }
   }, [placeholder, value]);
 
@@ -104,10 +105,10 @@ export default function TextArea({
     <textarea
       name={name}
       style={style}
-      value={value}
+      defaultValue={value}
       placeholder={placeholder}
       className={classNames("block w-full rounded-md bg-white px-4 py-4 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600", className)}
-      onChange={handleChange}
+      onChange={onChange ? handleChange : undefined}
       {...props}
     />
   )
