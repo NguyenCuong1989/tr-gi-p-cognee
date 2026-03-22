@@ -45,7 +45,7 @@ export default function TextArea({
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    onChange(event.target.value);
+    onChange?.(event.target.value);
   };
 
   const fakeTextAreaRef = useRef<HTMLDivElement>(null);
